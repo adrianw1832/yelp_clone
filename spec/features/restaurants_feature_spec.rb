@@ -10,7 +10,10 @@ feature 'restaurants' do
   end
 
   context 'restaurants have been added' do
-    before { create(:restaurant) }
+    before do
+      user = create(:user)
+      create(:restaurant, user: user)
+    end
 
     scenario 'display restaurants' do
       visit('/restaurants')
@@ -55,7 +58,7 @@ feature 'restaurants' do
 
   context 'viewing restaurants' do
     scenario 'lets a user view a restaurant' do
-      restaurant = create(:restaurant)
+      restaurant = create(:restaurant, user: create(:user))
       visit '/restaurants'
       click_link 'Goodman'
       expect(page).to have_content 'Goodman'
@@ -65,8 +68,8 @@ feature 'restaurants' do
 
   context 'editing restaurants' do
     before do
-      create(:restaurant)
       user = create(:user)
+      create(:restaurant, user: user)
       sign_in_as(user)
     end
 
@@ -78,12 +81,21 @@ feature 'restaurants' do
       expect(page).to have_content 'Goodman Steakhouse'
       expect(current_path).to eq '/restaurants'
     end
+
+    scenario 'user cannot edit a restaurant they did not create' do
+      click_link('Sign out')
+      user2 = create(:user, email: 'test2@test.com')
+      sign_in_as(user2)
+      visit('/restaurants')
+      click_link('Edit Goodman')
+      expect(page).to have_content('Error! You must be the creator to edit this entry.')
+    end
   end
 
   context 'deleting restaurants' do
     before do
-      create(:restaurant)
       user = create(:user)
+      create(:restaurant, user: user)
       sign_in_as(user)
     end
 
@@ -92,6 +104,15 @@ feature 'restaurants' do
       click_link 'Delete Goodman'
       expect(page).not_to have_content 'Goodman'
       expect(page).to have_content 'Restaurant deleted successfully'
+    end
+
+    scenario 'user cannot delete a restaurant they did not create' do
+      click_link('Sign out')
+      user2 = create(:user, email: 'test2@test.com')
+      sign_in_as(user2)
+      visit('/restaurants')
+      click_link('Delete Goodman')
+      expect(page).to have_content('Error! You must be the creator to delete this entry.')
     end
   end
 

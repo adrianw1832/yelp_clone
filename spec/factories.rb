@@ -8,6 +8,7 @@ FactoryGirl.define do
   factory :restaurant do
     name 'Goodman'
     rating 5
+    user
   end
 
   factory :review do
