@@ -6,7 +6,6 @@ class User < ActiveRecord::Base
 
   has_many :restaurants
   has_many :reviews
-  has_many :reviewed_restaurants, through: :reviews, source: :restaurant
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|

@@ -33,6 +33,9 @@ feature 'reviewing' do
     click_button 'Leave Review'
     visit '/restaurants'
     click_link 'Review Goodman'
+    fill_in 'Thoughts', with: 'so so'
+    select '3', from: 'Rating'
+    click_button 'Leave Review'
     expect(page).to have_content('You have already reviewed this restaurant')
   end
 end
