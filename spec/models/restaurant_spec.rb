@@ -26,11 +26,42 @@ describe Restaurant, type: :model do
   end
 end
 
+describe 'Restaurant' do
+    let(:user) { create(:user) }
+    let(:user2) { create(:user, email: 'test2@test.com') }
+    let(:restaurant) { create(:restaurant, user: user) }
+
+    context 'deleting restaurants' do
+    it 'can be deleted by its creator' do
+      restaurant.destroy_as_user(user)
+      expect(Restaurant.first).to be nil
+    end
+
+    it 'cannot be deleted by someone else' do
+      restaurant.destroy_as_user(user2)
+      expect(Restaurant.first).to eq restaurant
+    end
+  end
+
+  let(:edit_params) { {name: 'Badman'} }
+    context 'editing restaurants' do
+    it 'can be edited by its creator' do
+      restaurant.edit_as_user(edit_params, user)
+      expect(Restaurant.first.name).to eq 'Badman'
+    end
+
+    it 'cannot be edited by someone else' do
+      restaurant.edit_as_user(edit_params, user2)
+      expect(Restaurant.first.name).to eq 'Goodman'
+    end
+  end
+end
+
 describe 'reviews' do
   describe 'build_with_user' do
 
-    let(:user) { User.create email: 'test@test.com' }
-    let(:restaurant) { Restaurant.create name: 'Test' }
+    let(:user) { create(:user) }
+    let(:restaurant) { create(:restaurant, user: user) }
     let(:review_params) { {rating: 5, thoughts: 'yum'} }
 
     subject(:review) { restaurant.reviews.build_with_user(review_params, user) }

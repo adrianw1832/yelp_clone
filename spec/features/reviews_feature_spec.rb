@@ -8,14 +8,9 @@ feature 'reviewing' do
   end
 
   scenario 'allows logged in users to leave a review using a form' do
-    visit '/restaurants'
-    click_link 'Review Goodman'
-    fill_in 'Thoughts', with: 'so so'
-    select '3', from: 'Rating'
-    click_button 'Leave Review'
-
+    leave_review
     expect(current_path).to eq '/restaurants'
-    expect(page).to have_content('so so')
+    expect(page).to have_content('amazing')
   end
 
   scenario 'does not allow non logged in user to leave a review' do
@@ -26,16 +21,27 @@ feature 'reviewing' do
   end
 
   scenario 'user can only leave 1 review per restaurant' do
-    visit '/restaurants'
-    click_link 'Review Goodman'
-    fill_in 'Thoughts', with: 'so so'
-    select '3', from: 'Rating'
-    click_button 'Leave Review'
-    visit '/restaurants'
-    click_link 'Review Goodman'
-    fill_in 'Thoughts', with: 'so so'
-    select '3', from: 'Rating'
-    click_button 'Leave Review'
+    leave_review
+    leave_review
     expect(page).to have_content('You have already reviewed this restaurant')
+  end
+
+  context 'deleting reviews' do
+    before { leave_review }
+
+    scenario 'user can delete a review they created' do
+      click_link('Delete Review')
+      expect(page).not_to have_content 'amazing'
+      expect(page).to have_content 'Review deleted successfully'
+    end
+
+    scenario 'user cannot delete a review they did not create' do
+      click_link('Sign out')
+      user2 = create(:user, email: 'test2@test.com')
+      sign_in_as(user2)
+      visit('/restaurants')
+      click_link('Delete Review')
+      expect(page).to have_content('Error! You must be the creator to delete this entry.')
+    end
   end
 end

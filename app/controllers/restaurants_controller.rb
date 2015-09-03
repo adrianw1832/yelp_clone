@@ -18,17 +18,13 @@ class RestaurantsController < ApplicationController
     end
   end
 
-  def restaurant_params
-    params.require(:restaurant).permit(:name)
-  end
-
   def show
     @restaurant = Restaurant.find(params[:id])
   end
 
   def edit
     @restaurant = Restaurant.find(params[:id])
-    unless @restaurant.user == current_user
+    unless @restaurant.created_by?(current_user)
       flash[:notice] = 'Error! You must be the creator to edit this entry.'
       redirect_to restaurants_path
     end
@@ -36,18 +32,21 @@ class RestaurantsController < ApplicationController
 
   def update
     @restaurant = Restaurant.find(params[:id])
-    @restaurant.update(restaurant_params)
+    @restaurant.edit_as_user(restaurant_params, current_user)
     redirect_to restaurants_path
   end
 
   def destroy
     @restaurant = Restaurant.find(params[:id])
-    if @restaurant.user == current_user
-      @restaurant.destroy
+    if @restaurant.destroy_as_user(current_user)
       flash[:notice] = 'Restaurant deleted successfully'
     else
       flash[:notice] = 'Error! You must be the creator to delete this entry.'
     end
     redirect_to restaurants_path
+  end
+
+  def restaurant_params
+    params.require(:restaurant).permit(:name)
   end
 end
