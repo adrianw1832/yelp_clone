@@ -33,6 +33,6 @@ feature 'reviewing' do
     click_button 'Leave Review'
     visit '/restaurants'
     click_link 'Review Goodman'
-    expect(page).to have_content('You have reviewed this restaurant already!')
+    expect(page).to have_content('You have already reviewed this restaurant')
   end
 end
