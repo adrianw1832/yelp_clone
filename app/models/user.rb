@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   :recoverable, :rememberable, :trackable, :validatable, :omniauthable, omniauth_providers: [:facebook]
 
   has_many :restaurants
+  has_many :reviewed_restaurants, through: :reviews, source: :restaurant
+  has_many :reviews
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
@@ -13,11 +15,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.new_with_session(params, session)
-    super.tap do |user|
-      if data = session['devise.facebook_data'] && session['devise.facebook_data']['extra']['raw_info']
-        user.email = data['email'] if user.email.blank?
-      end
-    end
+  def has_reviewed?(restaurant)
+    reviewed_restaurant.include?(restaurant)
   end
 end
