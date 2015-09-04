@@ -32,7 +32,7 @@ class RestaurantsController < ApplicationController
 
   def update
     @restaurant = Restaurant.find(params[:id])
-    @restaurant.edit_as_user(restaurant_params, current_user)
+    @restaurant.update_as_user(restaurant_params, current_user)
     redirect_to restaurants_path
   end
 

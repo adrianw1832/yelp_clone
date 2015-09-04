@@ -31,15 +31,15 @@ RSpec.describe ReviewsHelper, type: :helper do
 
   context 'created_since' do
     it 'returns 0 for recently created reviews' do
-      expect(helper.created_since(Time.now)).to eq('0 hours')
+      expect(helper.created_since(Time.now)).to eq('Created 0 hours ago')
     end
 
     it 'returns 1 for recently created reviews' do
-      expect(helper.created_since(Time.now - 3600)).to eq('1 hour')
+      expect(helper.created_since(Time.now - 3600)).to eq('Created 1 hour ago')
     end
 
     it 'returns 1 for recently created reviews' do
-      expect(helper.created_since(Time.now - 7500)).to eq('2 hours')
+      expect(helper.created_since(Time.now - 7500)).to eq('Created 2 hours ago')
     end
   end
 end

@@ -46,12 +46,12 @@ describe 'Restaurant' do
   let(:edit_params) { {name: 'Badman'} }
   context 'editing restaurants' do
     it 'can be edited by its creator' do
-      restaurant.edit_as_user(edit_params, user)
+      restaurant.update_as_user(edit_params, user)
       expect(Restaurant.first.name).to eq 'Badman'
     end
 
     it 'cannot be edited by someone else' do
-      restaurant.edit_as_user(edit_params, user2)
+      restaurant.update_as_user(edit_params, user2)
       expect(Restaurant.first.name).to eq 'Goodman'
     end
   end

@@ -7,7 +7,7 @@ module AsUserAssociationExtension
     destroy if created_by?(user)
   end
 
-  def edit_as_user(attributes = {}, user)
+  def update_as_user(attributes = {}, user)
     update(attributes) if created_by?(user)
   end
 end
