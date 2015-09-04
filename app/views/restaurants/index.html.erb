@@ -9,7 +9,9 @@
             <p><%= pluralize review.endorsements.count, 'endorsement' %></p>
           </li>
         <%= created_since(review.created_at) %>
-        <%= link_to "Endorse", review_endorsements_path(review), method: :post %>
+        <%= link_to "Endorse", review_endorsements_path(review), class: 'endorsements-link' %>
+        <span class="endorsements_count"> <%= review.endorsements.count %> </span> <%= 'endorsement'.pluralize(review.endorsements.count) %>
+        </li>
         <%= link_to "Delete Review", review_path(review), method: :delete %>
         <% end %>
       </ul>
