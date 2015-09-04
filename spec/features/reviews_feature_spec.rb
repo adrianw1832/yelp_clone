@@ -47,6 +47,9 @@ feature 'reviewing' do
 
   scenario 'displays an average rating for all reviews' do
     leave_review('So so', '3')
+    click_link('Sign out')
+    user2 = create(:user, email: 'test2@test.com')
+    sign_in_as(user2)
     leave_review('Great', '5')
     expect(page).to have_content('Average rating: 4')
   end

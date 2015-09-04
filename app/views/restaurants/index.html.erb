@@ -10,6 +10,7 @@
         <%= link_to "Delete Review", restaurant_review_path(restaurant, review), method: :delete %>
         <% end %>
       </ul>
+      <h3>Average rating: <%= restaurant.average_rating.to_i %></h3>
     <% else %>
       <p>No reviews.</p>
     <% end %>
