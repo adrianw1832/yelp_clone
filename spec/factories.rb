@@ -1,4 +1,8 @@
 FactoryGirl.define do
+  factory :endorsement do
+    review nil
+  end
+
   factory :user do
     email 'test@test.com'
     password 'test1234'
