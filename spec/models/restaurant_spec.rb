@@ -27,11 +27,11 @@ describe Restaurant, type: :model do
 end
 
 describe 'Restaurant' do
-    let(:user) { create(:user) }
-    let(:user2) { create(:user, email: 'test2@test.com') }
-    let(:restaurant) { create(:restaurant, user: user) }
+  let(:user) { create(:user) }
+  let(:user2) { create(:user, email: 'test2@test.com') }
+  let(:restaurant) { create(:restaurant, user: user) }
 
-    context 'deleting restaurants' do
+  context 'deleting restaurants' do
     it 'can be deleted by its creator' do
       restaurant.destroy_as_user(user)
       expect(Restaurant.first).to be nil
@@ -44,7 +44,7 @@ describe 'Restaurant' do
   end
 
   let(:edit_params) { {name: 'Badman'} }
-    context 'editing restaurants' do
+  context 'editing restaurants' do
     it 'can be edited by its creator' do
       restaurant.edit_as_user(edit_params, user)
       expect(Restaurant.first.name).to eq 'Badman'
@@ -81,6 +81,14 @@ describe '#average_rating' do
     it 'returns "N/A" when there are no reviews' do
       restaurant = create(:restaurant)
       expect(restaurant.average_rating).to eq 'N/A'
+    end
+  end
+
+  context '1 review' do
+    it 'returns that rating' do
+      restaurant = create(:restaurant)
+      restaurant.reviews.create(rating: 5)
+      expect(restaurant.average_rating).to eq 5
     end
   end
 end
