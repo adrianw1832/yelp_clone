@@ -91,4 +91,15 @@ describe '#average_rating' do
       expect(restaurant.average_rating).to eq 5
     end
   end
+
+  context 'multiple reviews' do
+    it 'returns the average' do
+      user1 = create(:user, email: 'test1@test.com')
+      user2 = create(:user, email: 'test2@test.com')
+      restaurant = create(:restaurant)
+      restaurant.reviews.create(rating: 1, user: user1)
+      restaurant.reviews.create(rating: 5, user: user2)
+      expect(restaurant.average_rating).to eq 3
+    end
+  end
 end
