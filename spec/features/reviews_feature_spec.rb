@@ -8,7 +8,7 @@ feature 'reviewing' do
   end
 
   scenario 'allows logged in users to leave a review using a form' do
-    leave_review
+    leave_review('amazing', '5')
     expect(current_path).to eq '/restaurants'
     expect(page).to have_content('amazing')
   end
@@ -21,13 +21,13 @@ feature 'reviewing' do
   end
 
   scenario 'user can only leave 1 review per restaurant' do
-    leave_review
-    leave_review
+    leave_review('amazing', '5')
+    leave_review('amazing', '5')
     expect(page).to have_content('You have already reviewed this restaurant')
   end
 
   context 'deleting reviews' do
-    before { leave_review }
+    before { leave_review('amazing', '5') }
 
     scenario 'user can delete a review they created' do
       click_link('Delete Review')
@@ -43,5 +43,11 @@ feature 'reviewing' do
       click_link('Delete Review')
       expect(page).to have_content('Error! You must be the creator to delete this entry.')
     end
+  end
+
+  scenario 'displays an average rating for all reviews' do
+    leave_review('So so', '3')
+    leave_review('Great', '5')
+    expect(page).to have_content('Average rating: 4')
   end
 end
