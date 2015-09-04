@@ -51,6 +51,11 @@ feature 'reviewing' do
     user2 = create(:user, email: 'test2@test.com')
     sign_in_as(user2)
     leave_review('Great', '5')
-    expect(page).to have_content('Average rating: 4')
+    expect(page).to have_content('Average rating: ★★★★☆')
+  end
+
+  scenario 'displays when they were created relative to now' do
+    leave_review('Amazing', '5')
+    expect(page).to have_content('Created 0 hours ago')
   end
 end
