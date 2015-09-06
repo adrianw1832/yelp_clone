@@ -54,6 +54,23 @@ feature 'restaurants' do
       expect(page).not_to have_css 'h2', text: 'kf'
       expect(page).to have_content 'error'
     end
+
+    scenario 'user can upload an image of the restaurant' do
+      visit('/restaurants')
+      click_link('Add a restaurant')
+      fill_in('Name', with: 'Goodman')
+      attach_file('restaurant[image]', 'spec/assets_specs/images/testing.png')
+      click_button('Create Restaurant')
+      expect(page).to have_selector(:css, "img[src*='testing.png']")
+    end
+
+    scenario 'missing thumbnail is shown if no image is uploaded' do
+      visit('/restaurants')
+      click_link('Add a restaurant')
+      fill_in('Name', with: 'Goodman')
+      click_button('Create Restaurant')
+      expect(page).to have_selector(:css, "img[src*='missing.png']")
+    end
   end
 
   context 'viewing restaurants' do

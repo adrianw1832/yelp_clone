@@ -16,5 +16,5 @@ feature 'endorsing reviews' do
     visit '/restaurants'
     click_link 'Endorse'
     expect(page).to have_content("1 endorsement")
-  end
+  end  
 end
